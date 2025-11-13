@@ -37,3 +37,7 @@ lerna-debug.log*
 # Misc
 .cache/
 .temp/
+
+# Replit specific (do not ignore)
+# !.replit
+# !replit.nix
