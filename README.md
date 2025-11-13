@@ -389,7 +389,7 @@ MIT License - see LICENSE file for details
 
 Project Link: [https://github.com/Mbastidas001/SAIToken_v2](https://github.com/Mbastidas001/SAIToken_v2)
 
-For questions or support: amonroy@asi2.org
+For questions or support: team@asi2.org
 
 ## Acknowledgments
 
