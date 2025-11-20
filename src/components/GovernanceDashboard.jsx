@@ -30,7 +30,7 @@ const SAITGovernanceDashboard = () => {
     grants: []
   });
 
-  // Fetch data from blockchain or use mock data
+  // Fetch data from Sepolia testnet only
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
@@ -38,32 +38,27 @@ const SAITGovernanceDashboard = () => {
         const web3Available = isWeb3Configured();
         setIsBlockchainConnected(web3Available);
 
-        let data = null;
-        
-        if (web3Available) {
-          console.log('Fetching data from Sepolia testnet...');
-          data = await fetchAllBlockchainData();
+        if (!web3Available) {
+          console.error('Web3 not configured - cannot fetch blockchain data');
+          setLoading(false);
+          return;
         }
 
-        // If blockchain data fetch fails or not configured, use mock data
+        console.log('Fetching data from Sepolia testnet...');
+        const data = await fetchAllBlockchainData();
+
         if (!data) {
-          console.log('Using mock data (blockchain not available or fetch failed)');
-          data = {
-            saitCirculating: 10000000, // 10M SAIT in circulation (Year 1)
-            saitTreasury: 28550000, // After Year 1 sales
-            satTreasury: 1629000, // Year 1 SAT reserves
-            saitPrice: 165, // EOY Year 1 price
-            satPrice: 150, // Fixed SAT price
-            buybackRate: 0.015, // 1.5% monthly by Year 1 end
-            totalSupply: 100000000
-          };
-        } else {
-          console.log('Blockchain data fetched successfully:', data);
-          // Add price data (not available on-chain, would come from oracle/API)
-          data.saitPrice = 165;
-          data.satPrice = 150;
-          data.buybackRate = 0.015;
+          console.error('Failed to fetch blockchain data from Sepolia');
+          setLoading(false);
+          return;
         }
+
+        console.log('Blockchain data fetched successfully:', data);
+        
+        // Add price data (not available on-chain, would come from oracle/API)
+        data.saitPrice = 165;
+        data.satPrice = 150;
+        data.buybackRate = 0.015;
 
         setDashboardData(data);
         generateHistoricalData(data);
@@ -71,7 +66,7 @@ const SAITGovernanceDashboard = () => {
         generateGrantData();
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching blockchain data:', error);
         setLoading(false);
       }
     };
