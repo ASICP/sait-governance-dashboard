@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart, Area } from 'recharts';
-import { fetchAllBlockchainData, isWeb3Configured } from './utils/web3Integration';
+import { fetchAllBlockchainData, isWeb3Configured } from './src/utils/web3Integration';
+// import { fetchAllBlockchainData, isWeb3Configured } from './utils/web3Integration';
 
 // Dashboard Component for SAIT Token Ecosystem with Grant Governance Audit & Blockchain Integration
 const SAITGovernanceDashboard = () => {
