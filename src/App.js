@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import SAITGovernanceDashboard from './components/GovernanceDashboard';
-import web3Service from './services/web3Service';
 import './App.css';
 
 function App() {
@@ -46,7 +45,6 @@ function App() {
   const connectWallet = async () => {
     try {
       setError(null);
-      await web3Service.initialize();
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       setAccount(accounts[0]);
       setIsConnected(true);

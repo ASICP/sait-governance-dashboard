@@ -4,6 +4,7 @@ expertMode = true
 
 [nix]
 channel = "stable-25_05"
+packages = ["nano"]
 
 [workflows]
 runButton = "Project"
@@ -38,7 +39,7 @@ localPort = 5001
 externalPort = 3001
 
 [[ports]]
-localPort = 42339
+localPort = 43595
 externalPort = 3000
 
 [deployment]
