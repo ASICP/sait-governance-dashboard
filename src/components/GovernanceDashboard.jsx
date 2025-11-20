@@ -30,7 +30,7 @@ const SAITGovernanceDashboard = () => {
     grants: []
   });
 
-  // Fetch data from Sepolia testnet only
+  // Fetch current data from Sepolia testnet, use mock data for historical baseline
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
@@ -44,25 +44,41 @@ const SAITGovernanceDashboard = () => {
           return;
         }
 
-        console.log('Fetching data from Sepolia testnet...');
-        const data = await fetchAllBlockchainData();
+        console.log('Fetching current data from Sepolia testnet...');
+        const blockchainData = await fetchAllBlockchainData();
 
-        if (!data) {
+        if (!blockchainData) {
           console.error('Failed to fetch blockchain data from Sepolia');
           setLoading(false);
           return;
         }
 
-        console.log('Blockchain data fetched successfully:', data);
+        console.log('Blockchain data fetched successfully:', blockchainData);
         
         // Add price data (not available on-chain, would come from oracle/API)
-        data.saitPrice = 165;
-        data.satPrice = 150;
-        data.buybackRate = 0.015;
+        blockchainData.saitPrice = 165;
+        blockchainData.satPrice = 150;
+        blockchainData.buybackRate = 0.015;
 
-        setDashboardData(data);
-        generateHistoricalData(data);
-        generateProjections(data);
+        // Use current blockchain data for live metrics
+        setDashboardData(blockchainData);
+
+        // Historical data baseline (from original mock projections)
+        const historicalBaseline = {
+          saitCirculating: 10000000, // 10M SAIT in circulation (Year 1 projection)
+          saitTreasury: 28550000, // After Year 1 sales projection
+          satTreasury: 1629000, // Year 1 SAT reserves projection
+          saitPrice: 165,
+          satPrice: 150,
+          buybackRate: 0.015,
+          totalSupply: 100000000
+        };
+
+        // Generate historical charts using baseline mock data
+        generateHistoricalData(historicalBaseline);
+        
+        // Generate projections from current blockchain state
+        generateProjections(blockchainData);
         generateGrantData();
         setLoading(false);
       } catch (error) {
