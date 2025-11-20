@@ -23,6 +23,7 @@ function App() {
         window.ethereum.removeListener('chainChanged', handleChainChanged);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkWalletConnection = async () => {
@@ -48,7 +49,7 @@ function App() {
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       setAccount(accounts[0]);
       setIsConnected(true);
-      setUseMockData(false); // Switch to real data once connected
+      setUseMockData(false);
     } catch (err) {
       console.error('Error connecting wallet:', err);
       setError(err.message || 'Failed to connect wallet');
