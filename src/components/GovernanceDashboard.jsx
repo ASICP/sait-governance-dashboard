@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart, Area } from 'recharts';
+import { fetchAllBlockchainData, isWeb3Configured } from '../utils/web3Integration';
 
 // Dashboard Component for SAIT Token Ecosystem with Grant Governance Audit
 const SAITGovernanceDashboard = () => {
@@ -20,6 +21,7 @@ const SAITGovernanceDashboard = () => {
   const [historicalData, setHistoricalData] = useState([]);
   const [projections, setProjections] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isBlockchainConnected, setIsBlockchainConnected] = useState(false);
 
   // Grant governance data
   const [grantData, setGrantData] = useState({
@@ -28,24 +30,44 @@ const SAITGovernanceDashboard = () => {
     grants: []
   });
 
-  // Simulate fetching data from blockchain (replace with actual Web3 calls)
+  // Fetch data from blockchain or use mock data
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // Simulated data based on whitepaper Year 1 projections
-        const mockData = {
-          saitCirculating: 10000000, // 10M SAIT in circulation (Year 1)
-          saitTreasury: 28550000, // After Year 1 sales
-          satTreasury: 1629000, // Year 1 SAT reserves
-          saitPrice: 165, // EOY Year 1 price
-          satPrice: 150, // Fixed SAT price
-          buybackRate: 0.015, // 1.5% monthly by Year 1 end
-          totalSupply: 100000000
-        };
+        // Check if Web3 is configured
+        const web3Available = isWeb3Configured();
+        setIsBlockchainConnected(web3Available);
 
-        setDashboardData(mockData);
-        generateHistoricalData(mockData);
-        generateProjections(mockData);
+        let data = null;
+        
+        if (web3Available) {
+          console.log('Fetching data from Sepolia testnet...');
+          data = await fetchAllBlockchainData();
+        }
+
+        // If blockchain data fetch fails or not configured, use mock data
+        if (!data) {
+          console.log('Using mock data (blockchain not available or fetch failed)');
+          data = {
+            saitCirculating: 10000000, // 10M SAIT in circulation (Year 1)
+            saitTreasury: 28550000, // After Year 1 sales
+            satTreasury: 1629000, // Year 1 SAT reserves
+            saitPrice: 165, // EOY Year 1 price
+            satPrice: 150, // Fixed SAT price
+            buybackRate: 0.015, // 1.5% monthly by Year 1 end
+            totalSupply: 100000000
+          };
+        } else {
+          console.log('Blockchain data fetched successfully:', data);
+          // Add price data (not available on-chain, would come from oracle/API)
+          data.saitPrice = 165;
+          data.satPrice = 150;
+          data.buybackRate = 0.015;
+        }
+
+        setDashboardData(data);
+        generateHistoricalData(data);
+        generateProjections(data);
         generateGrantData();
         setLoading(false);
       } catch (error) {
@@ -57,6 +79,7 @@ const SAITGovernanceDashboard = () => {
     fetchDashboardData();
     const interval = setInterval(fetchDashboardData, 60000); // Update every minute
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Generate grant governance data
