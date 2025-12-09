@@ -10,9 +10,10 @@ const ERC20_ABI = [
   "function name() view returns (string)"
 ];
 
-// Initialize provider
+// Initialize provider using public Sepolia RPC (CORS-friendly)
 const getProvider = () => {
-  const rpcUrl = process.env.REACT_APP_SEPOLIA_RPC_URL;
+  // Using public Sepolia RPC - no API key required, CORS-friendly
+  const rpcUrl = 'https://rpc.sepolia.org';
   return new ethers.JsonRpcProvider(rpcUrl);
 };
 
@@ -129,14 +130,27 @@ export const fetchCirculatingSupply = async () => {
   }
 };
 
-// Fetch all blockchain data in one call
+// Helper function to add timeout to promises
+const withTimeout = (promise, timeoutMs) => {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Request timed out')), timeoutMs)
+    )
+  ]);
+};
+
+// Fetch all blockchain data in one call with timeout
 export const fetchAllBlockchainData = async () => {
   try {
-    const [tokenData, treasuryBalances, circulating] = await Promise.all([
-      fetchSAITTokenData(),
-      fetchTreasuryBalances(),
-      fetchCirculatingSupply()
-    ]);
+    const [tokenData, treasuryBalances, circulating] = await withTimeout(
+      Promise.all([
+        fetchSAITTokenData(),
+        fetchTreasuryBalances(),
+        fetchCirculatingSupply()
+      ]),
+      10000 // 10 second timeout
+    );
 
     if (!tokenData || !treasuryBalances || circulating === null) {
       throw new Error('Failed to fetch some blockchain data');
@@ -160,10 +174,8 @@ export const fetchAllBlockchainData = async () => {
 
 // Check if Web3 is available and configured
 export const isWeb3Configured = () => {
-  return !!(
-    process.env.REACT_APP_SEPOLIA_RPC_URL &&
-    process.env.REACT_APP_SAIT_TOKEN_ADDRESS
-  );
+  // Using public RPC, so only need to check contract address
+  return !!process.env.REACT_APP_SAIT_TOKEN_ADDRESS;
 };
 
 export default {

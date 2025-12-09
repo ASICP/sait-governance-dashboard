@@ -7,14 +7,14 @@ const SAITGovernanceDashboard = () => {
   // Tab state
   const [activeTab, setActiveTab] = useState('ecosystem'); // 'ecosystem' or 'grants'
   
-  // State for real-time data
+  // State for real-time data - initialized with baseline values
   const [dashboardData, setDashboardData] = useState({
-    saitCirculating: 0,
-    saitTreasury: 30000000,
-    satTreasury: 0,
-    saitPrice: 150,
+    saitCirculating: 10000000, // 10M baseline
+    saitTreasury: 28550000,    // Baseline treasury
+    satTreasury: 1629000,      // Baseline SAT reserves
+    saitPrice: 165,
     satPrice: 150,
-    buybackRate: 0.003,
+    buybackRate: 0.015,
     totalSupply: 100000000
   });
 
@@ -30,8 +30,27 @@ const SAITGovernanceDashboard = () => {
     grants: []
   });
 
+  // Historical data baseline (from original mock projections)
+  const historicalBaseline = {
+    saitCirculating: 10000000, // 10M SAIT in circulation (Year 1 projection)
+    saitTreasury: 28550000, // After Year 1 sales projection
+    satTreasury: 1629000, // Year 1 SAT reserves projection
+    saitPrice: 165,
+    satPrice: 150,
+    buybackRate: 0.015,
+    totalSupply: 100000000
+  };
+
   // Fetch current data from Sepolia testnet, use mock data for historical baseline
   useEffect(() => {
+    // Always generate historical data and grant data immediately
+    generateHistoricalData(historicalBaseline);
+    generateGrantData();
+    generateProjections(historicalBaseline);
+    
+    // Show dashboard immediately with baseline data
+    setLoading(false);
+
     const fetchDashboardData = async () => {
       try {
         // Check if Web3 is configured
@@ -39,8 +58,7 @@ const SAITGovernanceDashboard = () => {
         setIsBlockchainConnected(web3Available);
 
         if (!web3Available) {
-          console.error('Web3 not configured - cannot fetch blockchain data');
-          setLoading(false);
+          console.log('Web3 not configured - using baseline data');
           return;
         }
 
@@ -48,8 +66,7 @@ const SAITGovernanceDashboard = () => {
         const blockchainData = await fetchAllBlockchainData();
 
         if (!blockchainData) {
-          console.error('Failed to fetch blockchain data from Sepolia');
-          setLoading(false);
+          console.log('Failed to fetch blockchain data - keeping baseline data');
           return;
         }
 
@@ -60,30 +77,13 @@ const SAITGovernanceDashboard = () => {
         blockchainData.satPrice = 150;
         blockchainData.buybackRate = 0.015;
 
-        // Use current blockchain data for live metrics
+        // Update with current blockchain data for live metrics
         setDashboardData(blockchainData);
-
-        // Historical data baseline (from original mock projections)
-        const historicalBaseline = {
-          saitCirculating: 10000000, // 10M SAIT in circulation (Year 1 projection)
-          saitTreasury: 28550000, // After Year 1 sales projection
-          satTreasury: 1629000, // Year 1 SAT reserves projection
-          saitPrice: 165,
-          satPrice: 150,
-          buybackRate: 0.015,
-          totalSupply: 100000000
-        };
-
-        // Generate historical charts using baseline mock data
-        generateHistoricalData(historicalBaseline);
         
-        // Generate projections from current blockchain state
+        // Update projections from current blockchain state
         generateProjections(blockchainData);
-        generateGrantData();
-        setLoading(false);
       } catch (error) {
-        console.error('Error fetching blockchain data:', error);
-        setLoading(false);
+        console.log('Error fetching blockchain data:', error.message);
       }
     };
 
