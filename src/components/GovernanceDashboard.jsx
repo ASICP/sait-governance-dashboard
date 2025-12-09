@@ -616,7 +616,7 @@ const SAITGovernanceDashboard = () => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="tier3Grants" stackId="a" fill="#dc2626" name="Tier 3 ($1M+)" />
+                  <Bar dataKey="tier3Grants" stackId="a" fill="#3b82f6" name="Tier 3 ($1M+)" />
                   <Bar dataKey="tier2Grants" stackId="a" fill="#f59e0b" name="Tier 2 ($250K+)" />
                   <Bar dataKey="tier1Grants" stackId="a" fill="#10b981" name="Tier 1 ($50K+)" />
                 </BarChart>
@@ -633,7 +633,7 @@ const SAITGovernanceDashboard = () => {
                   <YAxis />
                   <Tooltip formatter={(value) => `$${(value / 1e6).toFixed(2)}M`} />
                   <Legend />
-                  <Bar dataKey="tier3Value" stackId="a" fill="#dc2626" name="Tier 3" />
+                  <Bar dataKey="tier3Value" stackId="a" fill="#3b82f6" name="Tier 3" />
                   <Bar dataKey="tier2Value" stackId="a" fill="#f59e0b" name="Tier 2" />
                   <Bar dataKey="tier1Value" stackId="a" fill="#10b981" name="Tier 1" />
                 </BarChart>
@@ -699,7 +699,7 @@ const SAITGovernanceDashboard = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{grant.quarter}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          grant.tier === 3 ? 'bg-red-100 text-red-800' :
+                          grant.tier === 3 ? 'bg-blue-100 text-blue-800' :
                           grant.tier === 2 ? 'bg-yellow-100 text-yellow-800' :
                           'bg-green-100 text-green-800'
                         }`}>
@@ -737,7 +737,7 @@ const SAITGovernanceDashboard = () => {
                     <span className="text-sm font-semibold text-gray-900">5 grants</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-red-600 h-2 rounded-full" style={{ width: '41.7%' }}></div>
+                    <div className="bg-blue-600 h-2 rounded-full" style={{ width: '41.7%' }}></div>
                   </div>
                 </div>
                 <div>
