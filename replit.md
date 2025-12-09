@@ -8,6 +8,15 @@ This is a React-based governance dashboard for the SAIT Token Ecosystem. It prov
 **Current State**: The application is fully configured for Replit and running on port 5000. It includes Web3 integration for connecting to Ethereum wallets (MetaMask) and displays both mock data and real blockchain data.
 
 ## Recent Changes
+- **December 09, 2025**: Fixed dashboard data issues and Sepolia integration
+  - Configured Alchemy RPC for reliable Sepolia testnet connectivity
+  - Fixed NaN calculation issues in buyback metrics
+  - Dashboard now loads immediately with baseline data, then updates with live blockchain data
+  - Added 10-second timeout for blockchain requests to prevent hanging
+  - Historical charts use mock baseline data (10M circulation projection)
+  - Current metrics display live Sepolia blockchain data
+  - Both tabs (Ecosystem Metrics & Grant Governance Audit) fully functional
+
 - **November 13, 2025**: Initial project import and Replit setup
   - Configured React app to run on port 5000 with host 0.0.0.0
   - Set up workflow for frontend with webview output

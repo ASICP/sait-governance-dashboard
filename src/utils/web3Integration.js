@@ -10,10 +10,9 @@ const ERC20_ABI = [
   "function name() view returns (string)"
 ];
 
-// Initialize provider using public Sepolia RPC (CORS-friendly)
+// Initialize provider using Alchemy Sepolia RPC
 const getProvider = () => {
-  // Using public Sepolia RPC - no API key required, CORS-friendly
-  const rpcUrl = 'https://rpc.sepolia.org';
+  const rpcUrl = 'https://eth-sepolia.g.alchemy.com/v2/33nEYBLRFd_1TfSplklSa';
   return new ethers.JsonRpcProvider(rpcUrl);
 };
 

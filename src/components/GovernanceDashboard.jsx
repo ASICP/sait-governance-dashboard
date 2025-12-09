@@ -338,7 +338,7 @@ const SAITGovernanceDashboard = () => {
               title="Circulating Supply" 
               value={`${(dashboardData.saitCirculating / 1e6).toFixed(1)}M`}
               subtitle={`${metrics.circulatingPercent.toFixed(1)}% of total`}
-              trend={`${(metrics.buybackRate * 100).toFixed(1)}% monthly buyback`}
+              trend={`${(dashboardData.buybackRate * 100).toFixed(1)}% monthly buyback`}
             />
             <MetricCard 
               title="Treasury Value" 
