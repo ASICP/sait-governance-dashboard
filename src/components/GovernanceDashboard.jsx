@@ -247,14 +247,15 @@ const SAITGovernanceDashboard = () => {
     const currentQ = grantData.quarterlyData[grantData.quarterlyData.length - 1];
     const totalCommitted = grantData.quarterlyData.reduce((sum, q) => sum + q.totalCommitted, 0);
     const totalGrants = grantData.grants.length;
-    const avgParticipation = grantData.quarterlyData.reduce((sum, q) => sum + q.avgVoterParticipation, 0) / grantData.quarterlyData.length;
+    const dataLength = grantData.quarterlyData.length || 1;
+    const avgParticipation = grantData.quarterlyData.reduce((sum, q) => sum + q.avgVoterParticipation, 0) / dataLength;
     
     return {
       currentProjectsReceiving: currentQ?.projectsReceiving || 0,
       currentProjectsApplying: currentQ?.projectsApplying || 0,
       totalCommitted,
       totalGrants,
-      avgParticipation: avgParticipation.toFixed(1)
+      avgParticipation: isNaN(avgParticipation) ? '0.0' : avgParticipation.toFixed(1)
     };
   };
 

@@ -16,17 +16,17 @@ const getProvider = () => {
   return new ethers.JsonRpcProvider(rpcUrl);
 };
 
-// Contract addresses from environment
+// Contract addresses (Sepolia testnet - public blockchain addresses)
 const ADDRESSES = {
-  saitToken: process.env.REACT_APP_SAIT_TOKEN_ADDRESS,
-  governanceStaking: process.env.REACT_APP_GOVERNANCE_STAKING_ADDRESS,
-  aiFund: process.env.REACT_APP_AI_FUND_ADDRESS,
-  treasury: process.env.REACT_APP_TREASURY_ADDRESS,
-  team: process.env.REACT_APP_TEAM_ADDRESS,
-  partner: process.env.REACT_APP_PARTNER_ADDRESS,
-  controller: process.env.REACT_APP_CONTROLLER_ADDRESS,
-  swap: process.env.REACT_APP_SWAP_ADDRESS,
-  mockSat: process.env.REACT_APP_MOCK_SAT_ADDRESS
+  saitToken: process.env.REACT_APP_SAIT_TOKEN_ADDRESS || '0x02213239610bbEe7A734cEC79DDbD1ed516E40bF',
+  governanceStaking: process.env.REACT_APP_GOVERNANCE_STAKING_ADDRESS || '0xE82F5dEA7631d522D33D96C7234A5b7DDd550A66',
+  aiFund: process.env.REACT_APP_AI_FUND_ADDRESS || '0x5C3E9f1AC0e6B3188c50291C522E24D42Fac01E1',
+  treasury: process.env.REACT_APP_TREASURY_ADDRESS || '0x99F62e317EC5c7AF43329dE27CED9E157b90dD98',
+  team: process.env.REACT_APP_TEAM_ADDRESS || '0x9CFf2e0651Ef7926398a46a176dDE4b64FC818b4',
+  partner: process.env.REACT_APP_PARTNER_ADDRESS || '0x790E5972C1bb9F646a83d5b801e3c4f51113B674',
+  controller: process.env.REACT_APP_CONTROLLER_ADDRESS || '0xcFB77BaE499Ab9812D3F4E51F0B79c33f5EB94cd',
+  swap: process.env.REACT_APP_SWAP_ADDRESS || '0xDA65e88F8E0b3F43E9215ad56A54ffd3D6b9B635',
+  mockSat: process.env.REACT_APP_MOCK_SAT_ADDRESS || '0xc866Bc738e27Ad4206C5e8188569a7dFd2209295'
 };
 
 // Fetch SAIT token data from blockchain
@@ -173,8 +173,8 @@ export const fetchAllBlockchainData = async () => {
 
 // Check if Web3 is available and configured
 export const isWeb3Configured = () => {
-  // Using public RPC, so only need to check contract address
-  return !!process.env.REACT_APP_SAIT_TOKEN_ADDRESS;
+  // Always configured since we have hardcoded fallbacks for Sepolia testnet
+  return true;
 };
 
 export default {
