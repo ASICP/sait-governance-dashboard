@@ -38,10 +38,6 @@ externalPort = 80
 localPort = 5001
 externalPort = 3001
 
-[[ports]]
-localPort = 43131
-externalPort = 3000
-
 [deployment]
 deploymentTarget = "static"
 run = ["npx", "serve", "-s", "build", "-l", "5000"]
