@@ -13,7 +13,7 @@ const ERC20_ABI = [
 // Initialize provider using Alchemy Sepolia RPC
 const getProvider = () => {
   const rpcUrl = 'https://eth-sepolia.g.alchemy.com/v2/33nEYBLRFd_1TfSplklSa';
-  return new ethers.providers.JsonRpcProvider(rpcUrl);
+  return new ethers.JsonRpcProvider(rpcUrl);
 };
 
 // Contract addresses (Sepolia testnet - public blockchain addresses)
@@ -45,7 +45,7 @@ export const fetchSAITTokenData = async () => {
     ]);
 
     return {
-      totalSupply: Number(ethers.utils.formatUnits(totalSupply, decimals)),
+      totalSupply: Number(ethers.formatUnits(totalSupply, decimals)),
       decimals: Number(decimals)
     };
   } catch (error) {
@@ -86,11 +86,11 @@ export const fetchTreasuryBalances = async () => {
     ]);
 
     return {
-      saitTreasury: Number(ethers.utils.formatUnits(treasuryBalance, decimals)),
-      aiFundReserve: Number(ethers.utils.formatUnits(aiFundBalance, decimals)),
-      teamAllocation: Number(ethers.utils.formatUnits(teamBalance, decimals)),
-      partnerAllocation: Number(ethers.utils.formatUnits(partnerBalance, decimals)),
-      satTreasury: Number(ethers.utils.formatUnits(satTreasuryBalance, decimals))
+      saitTreasury: Number(ethers.formatUnits(treasuryBalance, decimals)),
+      aiFundReserve: Number(ethers.formatUnits(aiFundBalance, decimals)),
+      teamAllocation: Number(ethers.formatUnits(teamBalance, decimals)),
+      partnerAllocation: Number(ethers.formatUnits(partnerBalance, decimals)),
+      satTreasury: Number(ethers.formatUnits(satTreasuryBalance, decimals))
     };
   } catch (error) {
     console.error('Error fetching treasury balances:', error);
@@ -119,11 +119,11 @@ export const fetchCirculatingSupply = async () => {
       saitContract.balanceOf(ADDRESSES.partner)
     ]);
 
-    // Use BigNumber methods for v5
-    const lockedTokens = treasuryBal.add(aiFundBal).add(teamBal).add(partnerBal);
-    const circulating = totalSupply.sub(lockedTokens);
+    // ethers v6 returns BigInt, use native operators
+    const lockedTokens = treasuryBal + aiFundBal + teamBal + partnerBal;
+    const circulating = totalSupply - lockedTokens;
 
-    return Number(ethers.utils.formatUnits(circulating, decimals));
+    return Number(ethers.formatUnits(circulating, decimals));
   } catch (error) {
     console.error('Error fetching circulating supply:', error);
     return null;
