@@ -1,15 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import SAITGovernanceDashboard from './components/GovernanceDashboard';
-import { isWeb3Configured } from './utils/web3Integration';
 import './App.css';
 
 function App() {
-  const SAIT_CONTRACT_ADDRESS = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEbE';
-  const [isWeb3Available, setIsWeb3Available] = useState(false);
-
-  useEffect(() => {
-    setIsWeb3Available(isWeb3Configured());
-  }, []);
+  const SAIT_CONTRACT_ADDRESS = '0x02213239610bbEe7A734cEC79DDbD1ed516E40bF';
 
   return (
     <div className="App">
@@ -30,21 +24,33 @@ function App() {
               </div>
             </div>
 
+            {/* Dashboard Navigation Buttons */}
+            <div className="flex items-center space-x-2">
+              <a
+                href="https://abc.asi2.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors flex items-center"
+              >
+                ABC Dash
+                <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+              <a
+                href="https://govdash.asi2.org/"
+                className="px-4 py-2 text-sm font-medium text-green-600 bg-white border-2 border-green-500 rounded-lg hover:bg-green-50 transition-colors"
+              >
+                SAIT Dash
+              </a>
+            </div>
+
             {/* Contract Address and Data Source Badge */}
             <div className="flex items-center space-x-4">
-              {isWeb3Available ? (
-                <div className="flex items-center bg-green-50 px-3 py-1 rounded-full">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                  <span className="text-xs font-medium text-green-800">Live Data (Sepolia)</span>
-                </div>
-              ) : (
-                <div className="flex items-center bg-yellow-50 px-3 py-1 rounded-full">
-                  <svg className="h-4 w-4 text-yellow-600 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-xs font-medium text-yellow-800">Mock Data</span>
-                </div>
-              )}
+              <div className="flex items-center bg-green-50 px-3 py-1 rounded-full">
+                <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                <span className="text-xs font-medium text-green-800">Live Data (Sepolia)</span>
+              </div>
               <div className="flex items-center bg-gray-100 px-4 py-2 rounded-lg">
                 <span className="text-xs text-gray-600 mr-2">Contract:</span>
                 <code className="text-xs font-mono text-gray-900">{SAIT_CONTRACT_ADDRESS}</code>
@@ -75,17 +81,17 @@ function App() {
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Resources</h3>
               <ul className="space-y-2">
                 <li>
-                  <a href="https://github.com/Mbastidas001/SAIToken_v2" className="text-xs text-blue-600 hover:text-blue-800">
+                  <a href="https://github.com/ASICP/sait-governance-dashboard" target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:text-blue-800">
                     GitHub Repository
                   </a>
                 </li>
                 <li>
-                  <a href="#whitepaper" className="text-xs text-blue-600 hover:text-blue-800">
+                  <a href="https://app.box.com/file/2027229500980?s=mh4hy0evbcll9o8t3nthrwilanb2h3xj" target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:text-blue-800">
                     ASIP White Paper
                   </a>
                 </li>
                 <li>
-                  <a href="#economics" className="text-xs text-blue-600 hover:text-blue-800">
+                  <a href="https://asi2.org/protocol-faq/" target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:text-blue-800">
                     SAIT/SAT Economics
                   </a>
                 </li>
@@ -98,15 +104,15 @@ function App() {
               <p className="text-xs text-gray-600 mb-2">
                 For questions or support:
               </p>
-              <a href="mailto:amonroy@asi2.org" className="text-xs text-blue-600 hover:text-blue-800">
-                amonroy@asi2.org
+              <a href="mailto:team@asi2.org" className="text-xs text-blue-600 hover:text-blue-800">
+                team@asi2.org
               </a>
             </div>
           </div>
 
           <div className="mt-8 pt-6 border-t border-gray-200">
             <p className="text-xs text-center text-gray-500">
-              © 2025 ASIP. All rights reserved. | 
+              © 2026 ASI Institute. All rights reserved. | 
               <span className="ml-2">
                 Dashboard Version 1.0.0
               </span>

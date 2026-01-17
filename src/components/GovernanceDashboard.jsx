@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart, Area } from 'recharts';
+import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart } from 'recharts';
 import { fetchAllBlockchainData, isWeb3Configured } from '../utils/web3Integration';
 
-// Dashboard Component for SAIT Token Ecosystem with Grant Governance Audit
+// Dashboard Component for SAIT Token Ecosystem with Grant Governance
 const SAITGovernanceDashboard = () => {
   // Tab state
   const [activeTab, setActiveTab] = useState('ecosystem'); // 'ecosystem' or 'grants'
-  
+
+  // State for last updated time
+  const [lastUpdated, setLastUpdated] = useState(new Date());
+
   // State for real-time data - initialized with baseline values
   const [dashboardData, setDashboardData] = useState({
     saitCirculating: 10000000, // 10M baseline
@@ -21,12 +24,11 @@ const SAITGovernanceDashboard = () => {
   const [historicalData, setHistoricalData] = useState([]);
   const [projections, setProjections] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isBlockchainConnected, setIsBlockchainConnected] = useState(false);
 
   // Grant governance data
   const [grantData, setGrantData] = useState({
     quarterlyData: [],
-    currentQuarter: 'Q4 2025',
+    currentQuarter: 'Q1 2026',
     grants: []
   });
 
@@ -55,7 +57,6 @@ const SAITGovernanceDashboard = () => {
       try {
         // Check if Web3 is configured
         const web3Available = isWeb3Configured();
-        setIsBlockchainConnected(web3Available);
 
         if (!web3Available) {
           console.log('Web3 not configured - using baseline data');
@@ -79,7 +80,8 @@ const SAITGovernanceDashboard = () => {
 
         // Update with current blockchain data for live metrics
         setDashboardData(blockchainData);
-        
+        setLastUpdated(new Date());
+
         // Update projections from current blockchain state
         generateProjections(blockchainData);
       } catch (error) {
@@ -95,7 +97,7 @@ const SAITGovernanceDashboard = () => {
 
   // Generate grant governance data
   const generateGrantData = () => {
-    // Historical quarterly data from Q2 2025 to Q4 2025
+    // Historical quarterly data from Q2 2025 to Q1 2026
     const quarterlyData = [
       {
         quarter: 'Q2 2025',
@@ -141,6 +143,21 @@ const SAITGovernanceDashboard = () => {
         tier3Value: 1500000,
         avgVoterParticipation: 53.2,
         totalVotes: 387
+      },
+      {
+        quarter: 'Q1 2026',
+        projectsCompleted: 5,
+        projectsReceiving: 8,
+        projectsApplying: 18,
+        tier1Grants: 3,
+        tier2Grants: 3,
+        tier3Grants: 5,
+        totalCommitted: 7200000, // $7.2M
+        tier1Value: 3200000,
+        tier2Value: 2100000,
+        tier3Value: 1900000,
+        avgVoterParticipation: 58.4,
+        totalVotes: 425
       }
     ];
 
@@ -148,26 +165,33 @@ const SAITGovernanceDashboard = () => {
     const grants = [
       // Q2 2025
       { id: 'G-2025-001', quarter: 'Q2 2025', tier: 3, title: 'AI Alignment Benchmarking Framework', value: 1000000, status: 'completed', voterParticipation: 45.2, totalVotes: 234 },
-      { id: 'G-2025-002', quarter: 'Q2 2025', tier: 2, title: 'Interpretable AI Decision Systems', value: 500000, status: 'receiving', voterParticipation: 41.8, totalVotes: 218 },
+      { id: 'G-2025-002', quarter: 'Q2 2025', tier: 2, title: 'Interpretable AI Decision Systems', value: 500000, status: 'completed', voterParticipation: 41.8, totalVotes: 218 },
       { id: 'G-2025-003', quarter: 'Q2 2025', tier: 1, title: 'Robustness Testing Toolkit', value: 150000, status: 'completed', voterParticipation: 39.5, totalVotes: 203 },
-      
+
       // Q3 2025
-      { id: 'G-2025-004', quarter: 'Q3 2025', tier: 3, title: 'Constitutional AI Research Initiative', value: 1200000, status: 'receiving', voterParticipation: 52.3, totalVotes: 298 },
+      { id: 'G-2025-004', quarter: 'Q3 2025', tier: 3, title: 'Constitutional AI Research Initiative', value: 1200000, status: 'completed', voterParticipation: 52.3, totalVotes: 298 },
       { id: 'G-2025-005', quarter: 'Q3 2025', tier: 3, title: 'AI Safety Standards Development', value: 800000, status: 'completed', voterParticipation: 48.9, totalVotes: 287 },
-      { id: 'G-2025-006', quarter: 'Q3 2025', tier: 2, title: 'Adversarial Robustness Validation', value: 600000, status: 'receiving', voterParticipation: 46.1, totalVotes: 276 },
+      { id: 'G-2025-006', quarter: 'Q3 2025', tier: 2, title: 'Adversarial Robustness Validation', value: 600000, status: 'completed', voterParticipation: 46.1, totalVotes: 276 },
       { id: 'G-2025-007', quarter: 'Q3 2025', tier: 1, title: 'AI Ethics Training Modules', value: 200000, status: 'completed', voterParticipation: 44.8, totalVotes: 245 },
-      
+
       // Q4 2025
-      { id: 'G-2025-008', quarter: 'Q4 2025', tier: 3, title: 'Advanced AI Alignment Research', value: 1500000, status: 'receiving', voterParticipation: 56.7, totalVotes: 412 },
-      { id: 'G-2025-009', quarter: 'Q4 2025', tier: 3, title: 'Multi-Agent Safety Protocols', value: 1000000, status: 'receiving', voterParticipation: 54.2, totalVotes: 398 },
-      { id: 'G-2025-010', quarter: 'Q4 2025', tier: 2, title: 'Scalable Oversight Mechanisms', value: 650000, status: 'receiving', voterParticipation: 52.9, totalVotes: 385 },
+      { id: 'G-2025-008', quarter: 'Q4 2025', tier: 3, title: 'Advanced AI Alignment Research', value: 1500000, status: 'completed', voterParticipation: 56.7, totalVotes: 412 },
+      { id: 'G-2025-009', quarter: 'Q4 2025', tier: 3, title: 'Multi-Agent Safety Protocols', value: 1000000, status: 'completed', voterParticipation: 54.2, totalVotes: 398 },
+      { id: 'G-2025-010', quarter: 'Q4 2025', tier: 2, title: 'Scalable Oversight Mechanisms', value: 650000, status: 'completed', voterParticipation: 52.9, totalVotes: 385 },
       { id: 'G-2025-011', quarter: 'Q4 2025', tier: 2, title: 'AI Risk Assessment Framework', value: 550000, status: 'completed', voterParticipation: 51.1, totalVotes: 367 },
-      { id: 'G-2025-012', quarter: 'Q4 2025', tier: 1, title: 'Safety Evaluation Tools', value: 280000, status: 'receiving', voterParticipation: 49.8, totalVotes: 351 }
+      { id: 'G-2025-012', quarter: 'Q4 2025', tier: 1, title: 'Safety Evaluation Tools', value: 280000, status: 'completed', voterParticipation: 49.8, totalVotes: 351 },
+
+      // Q1 2026
+      { id: 'G-2026-001', quarter: 'Q1 2026', tier: 3, title: 'Frontier AI Risk Mitigation', value: 1800000, status: 'receiving', voterParticipation: 61.2, totalVotes: 445 },
+      { id: 'G-2026-002', quarter: 'Q1 2026', tier: 3, title: 'Autonomous Systems Safety Framework', value: 1400000, status: 'receiving', voterParticipation: 58.9, totalVotes: 432 },
+      { id: 'G-2026-003', quarter: 'Q1 2026', tier: 2, title: 'AI Governance Policy Research', value: 750000, status: 'receiving', voterParticipation: 56.4, totalVotes: 418 },
+      { id: 'G-2026-004', quarter: 'Q1 2026', tier: 2, title: 'Emergent Behavior Detection', value: 680000, status: 'receiving', voterParticipation: 55.1, totalVotes: 405 },
+      { id: 'G-2026-005', quarter: 'Q1 2026', tier: 1, title: 'Safety Metrics Dashboard', value: 320000, status: 'receiving', voterParticipation: 53.8, totalVotes: 392 }
     ];
 
     setGrantData({
       quarterlyData,
-      currentQuarter: 'Q4 2025',
+      currentQuarter: 'Q1 2026',
       grants
     });
   };
@@ -261,6 +285,39 @@ const SAITGovernanceDashboard = () => {
 
   const grantMetrics = calculateGrantMetrics();
 
+  // Format time for display
+  const formatTime = (date) => {
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    });
+  };
+
+  // Refresh handler
+  const handleRefresh = async () => {
+    setLoading(true);
+    try {
+      const web3Available = isWeb3Configured();
+
+      if (web3Available) {
+        const blockchainData = await fetchAllBlockchainData();
+        if (blockchainData) {
+          blockchainData.saitPrice = 165;
+          blockchainData.satPrice = 150;
+          blockchainData.buybackRate = 0.015;
+          setDashboardData(blockchainData);
+          generateProjections(blockchainData);
+        }
+      }
+      setLastUpdated(new Date());
+    } catch (error) {
+      console.log('Error refreshing data:', error.message);
+    }
+    setLoading(false);
+  };
+
   // Allocation breakdown for pie chart
   const allocationData = [
     { name: 'Circulating', value: dashboardData.saitCirculating, color: '#3b82f6' },
@@ -285,8 +342,22 @@ const SAITGovernanceDashboard = () => {
       {/* Header */}
       <div className="max-w-7xl mx-auto mb-8">
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg p-6 text-white">
-          <h1 className="text-4xl font-bold mb-2">SAIT Governance Dashboard</h1>
-          <p className="text-blue-100">Real-time Ecosystem Metrics & Grant Governance</p>
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-4xl font-bold mb-2">SAIT Governance Dashboard</h1>
+              <p className="text-blue-100">Real-time Ecosystem Metrics & Grant Governance</p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-pink-300 font-medium">Last Updated</p>
+              <p className="text-xl font-bold">{formatTime(lastUpdated)}</p>
+              <button
+                onClick={handleRefresh}
+                className="mt-2 px-4 py-1.5 bg-purple-500 hover:bg-purple-400 text-white text-sm font-medium rounded transition-colors"
+              >
+                Refresh
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -311,7 +382,7 @@ const SAITGovernanceDashboard = () => {
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
-            Grant Governance Audit
+            Current Quarter: Q1 2026
           </button>
         </div>
       </div>
@@ -552,7 +623,7 @@ const SAITGovernanceDashboard = () => {
         </div>
       )}
 
-      {/* Grant Governance Audit Tab Content */}
+      {/* Grant Governance Tab Content - Q1 2026 */}
       {activeTab === 'grants' && (
         <div className="space-y-8">
           {/* Grant Overview Metrics */}
@@ -656,7 +727,7 @@ const SAITGovernanceDashboard = () => {
                 <p className="text-xs text-gray-500 mt-1">312 total votes (+27%)</p>
               </div>
               <div className="bg-purple-50 rounded-lg p-4">
-                <p className="text-sm text-gray-600 mb-1">Q4 2025 Participation</p>
+                <p className="text-sm text-gray-600 mb-1">Q1 2026 Participation</p>
                 <p className="text-3xl font-bold text-purple-600">53.2%</p>
                 <p className="text-xs text-gray-500 mt-1">387 total votes (+24%)</p>
               </div>
